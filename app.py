@@ -1,4 +1,3 @@
-
 import streamlit as st
 from abc import ABC, abstractmethod
 
@@ -7,14 +6,12 @@ st.set_page_config(
     layout="wide"
 )
 
-
 class Food:
 
     def __init__(self, food_id, name, price):
         self.food_id = food_id
         self.name = name
         self.price = price
-
 
 class Order:
 
@@ -23,15 +20,11 @@ class Order:
         self.food = food
         self.quantity = quantity
         self.total = food.price * quantity
-
-
 class Person:
 
     def __init__(self, name, phone):
         self.name = name
         self.phone = phone
-
-
 class Customer(Person):
 
     def __init__(self, name, phone, balance):
@@ -54,19 +47,18 @@ class Customer(Person):
         return False
 
 
+
 class DeliveryPartner(Person):
 
     def __init__(self, name, phone, vehicle):
         super().__init__(name, phone)
         self.vehicle = vehicle
 
-
 class Payment(ABC):
 
     @abstractmethod
     def pay(self, amount):
         pass
-
 
 class UpiPayment(Payment):
 
@@ -85,7 +77,6 @@ class CashPayment(Payment):
     def pay(self, amount):
         return f"Rs. {amount} will be paid using Cash on Delivery"
 
-
 foods = [
     Food(1, "Pizza", 199),
     Food(2, "Burger", 99),
@@ -93,7 +84,6 @@ foods = [
     Food(4, "Sandwich", 120),
     Food(5, "Fried Rice", 180)
 ]
-
 
 if "customer" not in st.session_state:
     st.session_state.customer = Customer("Gokul", "9876543210", 1000)
@@ -134,35 +124,27 @@ page = st.sidebar.radio(
 if page == "Dashboard":
 
     st.header("Dashboard")
-
     col1, col2, col3 = st.columns(3)
-
     col1.metric("Total Food Items", len(foods))
     col2.metric("Total Orders", len(st.session_state.orders))
     col3.metric("Wallet Balance", f"Rs. {customer.get_balance()}")
 
     st.subheader("Welcome to Food Delivery Management")
 
-
 elif page == "Food Menu":
 
     st.header("Available Food")
-
     for food in foods:
         with st.container(border=True):
             st.subheader(food.name)
             st.write(f"Price: Rs. {food.price}")
 
-
 elif page == "Customers":
 
     st.header("Customer Management")
-
     st.write("Customer Name:", customer.name)
     st.write("Phone Number:", customer.phone)
-
     st.subheader("Wallet Management")
-
     st.metric("Wallet Balance", f"Rs. {customer.get_balance()}")
 
     amount = st.number_input(
@@ -203,13 +185,9 @@ elif page == "Orders":
     if st.button("Place Order"):
 
         order = Order(customer, selected_food, quantity)
-
         st.session_state.orders.append(order)
-
         st.success("Order placed successfully!")
-
     st.subheader("Order History")
-
     for index, order in enumerate(st.session_state.orders, start=1):
         st.write(
             f"{index}. {order.food.name} | "
@@ -217,11 +195,9 @@ elif page == "Orders":
             f"Total: Rs. {order.total}"
         )
 
-
 elif page == "Payments":
 
     st.header("Payment Management")
-
     if not st.session_state.orders:
         st.info("Please place an order first.")
 
